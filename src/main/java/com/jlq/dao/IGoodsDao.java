@@ -9,7 +9,7 @@ import tk.mybatis.mapper.common.BaseMapper;
  * @date ：Created in 2020/10/22 20:29
  */
 
-@Repository
+//@Repository
 public interface IGoodsDao extends BaseMapper<GoodsInfo> {
 
 }

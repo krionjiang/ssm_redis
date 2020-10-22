@@ -7,7 +7,9 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="db.properties"/>
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <context:component-scan base-package="com.jlq"/>
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="driverClassName" value="${jdbc.driver}"/>
@@ -19,10 +21,10 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="com.jlq.domain"/>
-        <property name="configLocation" value="mybatis/mybatis-config.xml"/>
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
     </bean>
 
-    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+    <bean  class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <property name="basePackage" value="com.jlq.dao"/>
     </bean>
