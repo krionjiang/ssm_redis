@@ -2,6 +2,7 @@ package com.jlq.test;
 
 import com.jlq.domain.GoodsInfo;
 import com.jlq.service.IGoodsService;
+import com.jlq.tools.JSONChange;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class GoodTest {
     public void testFindAll() {
         System.out.println(gs);
         List<GoodsInfo> goodsInfos = gs.findAll();
+        String s = JSONChange.objToJson(goodsInfos);
+        System.out.println(s);
         for (GoodsInfo good:goodsInfos
              ) {
             System.out.println(good);

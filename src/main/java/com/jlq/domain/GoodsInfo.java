@@ -1,5 +1,6 @@
 package com.jlq.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
@@ -21,6 +22,7 @@ public class GoodsInfo {
     private String goodDesc;
     private String goodArea;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
     @Column(name = "quality")
     private Float goodQuality;

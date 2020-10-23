@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layout 后台大布局 - Layui</title>
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+      <div class="layui-logo">layui 后台布局</div>
+      <!-- 头部区域（可配合layui已有的水平导航） -->
+      <ul class="layui-nav layui-layout-left">
+        <li class="layui-nav-item"><a href="">控制台</a></li>
+        <li class="layui-nav-item"><a href="">商品管理</a></li>
+        <li class="layui-nav-item"><a href="">用户</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">其它系统</a>
+          <dl class="layui-nav-child">
+            <dd><a href="">邮件管理</a></dd>
+            <dd><a href="">消息管理</a></dd>
+            <dd><a href="">授权管理</a></dd>
+          </dl>
+        </li>
+      </ul>
+      <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+          <a href="javascript:;">
+            <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+            贤心
+          </a>
+          <dl class="layui-nav-child">
+            <dd><a href="">基本资料</a></dd>
+            <dd><a href="">安全设置</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">退了</a></li>
+      </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+      <div class="layui-side-scroll">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="test">
+          <li class="layui-nav-item layui-nav-itemed">
+            <a class="" href="javascript:;">所有商品</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">列表一</a></dd>
+              <dd><a href="javascript:;">列表二</a></dd>
+              <dd><a href="javascript:;">列表三</a></dd>
+              <dd><a href="">超链接</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">解决方案</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">列表一</a></dd>
+              <dd><a href="javascript:;">列表二</a></dd>
+              <dd><a href="">超链接</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item"><a href="">云市场</a></li>
+          <li class="layui-nav-item"><a href="">发布商品</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="layui-body">
+      <!-- 内容主体区域 -->
+      <div style="padding: 15px;">
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+
+        <script type="text/html" id="barDemo">
+        <!-- <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a> -->
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+
+        <script type="text/html" id='toolbar'>
+        <div class="layui-inline" lay-event="add">
+          <i class="layui-icon layui-icon-add-1"></i>
+        </div>
+      </script>
+
+
+      </div>
+    </div>
+
+    <div class="layui-footer">
+      <!-- 底部固定区域 -->
+      © layui.com - 底部固定区域
+    </div>
+  </div>
+  <script src="/static/layui/layui.js"></script>
+  <script>
+    layui.use(['table', 'layer'], function () {
+      var table = layui.table;
+      var layer = layui.layer;
+
+      table.render({
+        elem: '#test'
+        , url: '/goods/layout'
+        , toolbar: '#toolbar'
+        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , cols: [[
+          { field: 'goodId', title: 'ID', sort: true }
+          , { field: 'goodName', title: '货物名称' }
+          , { field: 'goodPrice', title: '货物价格', sort: true }
+          , { field: 'goodDesc', title: '描述' }
+          , { field: 'goodArea', title: '生产地', minWidth: 100 } //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+          , { field: 'createDate', title: '生产时间', sort: true }
+          , { field: 'goodQuality', title: '质量', width: 80, sort: true }
+          , { field: 'goodStock', title: '库存' }
+          , { fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo' }
+        ]]
+      });
+
+      //监听头工具栏事件
+      table.on('toolbar(test)', function (obj) {
+        var checkStatus = table.checkStatus(obj.config.id)
+          , data = checkStatus.data; //获取选中的数据
+        switch (obj.event) {
+          case 'add':
+            layer.msg('添加');
+            layer.open({
+              type: 2
+              , area: ['690px', '500px']
+              , content: '/add.html' //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            });
+            break;
+          case 'update':
+            if (data.length === 0) {
+              layer.msg('请选择一行');
+            } else if (data.length > 1) {
+              layer.msg('只能同时编辑一个');
+            } else {
+              layer.alert('编辑 [id]：' + checkStatus.data[0].id);
+            }
+            break;
+          case 'delete':
+            if (data.length === 0) {
+              layer.msg('请选择一行');
+            } else {
+              layer.msg('删除');
+            }
+            break;
+        };
+      });
+
+      //监听行工具事件
+      table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        var data = obj.data //获得当前行数据
+          , layEvent = obj.event; //获得 lay-event 对应的值
+        if (layEvent === 'detail') {
+          layer.msg('查看操作');
+        } else if (layEvent === 'del') {
+          layer.confirm('真的删除行么', function (index) {
+            obj.del(); //删除对应行（tr）的DOM结构
+            layer.close(index);
+            //向服务端发送删除指令
+          });
+        } else if (layEvent === 'edit') {
+          layer.msg('编辑操作');
+          layer.open({
+              type: 2
+              , area: ['690px', '500px']
+              , content: '/edit.html' //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            });
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>
